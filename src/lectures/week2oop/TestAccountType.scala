@@ -113,3 +113,60 @@ object PrivilegedAccount {
     new PrivilegedAccount(accountId = accountId, accountType = accountType, settings = settings, subscriptionStatus = subscriptionStatus)
   }
 }
+
+
+
+
+
+
+trait Degree {
+  def info(): Unit
+}
+
+trait Bachelor extends Degree {
+  def info(): Unit = println("Bachelor Degree")
+}
+
+trait Master extends Degree {
+  override def info(): Unit = println("Master Degree")
+}
+
+trait Doctorate extends Degree {
+  override def info(): Unit = println("Bachelor Degree")
+}
+
+trait BachelorOfArts extends Bachelor {
+  override def info(): Unit = {
+    super.info()
+    println("Bachelor of Arts")
+  }
+}
+
+trait BachelorOfScience extends Bachelor {
+  override def info(): Unit = {
+    super.info()
+    println("Bachelor of Science")
+  }
+}
+
+trait MasterOfLaw extends Master {
+  override def info(): Unit = {
+    super.info()
+    println("Master of Law")
+  }
+}
+
+class CombinedDegree extends BachelorOfArts with MasterOfLaw {
+  override def info(): Unit = println("Combined Degree")
+}
+
+object TestBachelor extends App {
+  val combinedDegree1 = new BachelorOfScience with MasterOfLaw
+  val combinedDegree2 = new CombinedDegree
+
+  combinedDegree1.info()
+  combinedDegree2.info()
+
+
+}
+
