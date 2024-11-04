@@ -123,4 +123,100 @@ object TestImplicits4 extends App {
 
   println(result3.isRight) // false
   println(result3.isLeft) // true
+
+  case class Course(
+                     id: Int,
+                     title: String,
+                     level: String)
+
+  val courses = Seq(
+    Course(
+      id = 1,
+      title = "Programming in Scala",
+      level = "Beginner"),
+    Course(
+      id = 2,
+      title = "English",
+      level = "Advanced"),
+    Course(
+      id = 3,
+      title = "Programming in Java",
+      level = "Beginner"),
+  )
+
+  def findCourses(
+                   courses: Seq[Course],
+                   lookupFunction: Course => Boolean)
+  : Seq[Course] = {
+
+    courses.filter(lookupFunction)
+  }
+
+  val hasTitle: Seq[String] => Course => Boolean = {
+    titles => course => titles.contains(course.title)
+  }
+
+  val hasDifficultyLevel: String => Course => Boolean = {
+    level => course => course.level.equals(level)
+  }
+
+  val searchResult: Seq[Course] = findCourses(courses, hasDifficultyLevel("Beginner"))
+
+  searchResult.foreach(println)
+
+  val searchResult2: Seq[Course] =
+    findCourses(courses, hasTitle(Seq("Programming", "English")))
+
+  searchResult2.foreach(println)
+
+  def someFunc(aList: List[Int]): Int =
+    aList.foldLeft(0)((a, _) => a + 1)
+
+  println(someFunc(List(1,2,3,4)))
+
+
+
+  def double(aList: List[Int], func: Int => Int = {n => n * 2}): List[Int] = {
+    aList.map(func)
+  }
+
+  println(double(List(1,2,3,4)))
+
+  def f(aList: List[Int]): Int = {
+    val res = aList.foldLeft((0, 1))((r, c) =>
+      (r._1 + c, r._2 * c)
+    )
+
+    Try(res._2 / res._1).orElse(Try(0)).get
+  }
+
+  println(f(List(1, -1)))
+
+  def doSomething(
+                   condition: Boolean,
+                   ifAction: Unit,
+                   elseAction: Unit): Unit = {
+    if (condition)
+      ifAction
+    else elseAction
+  }
+
+  doSomething(
+    2 == 4,
+    println("ifAction"),
+    println("elseAction"))
+
+  def callByName(n: => Int): Int = {
+    lazy val t = n
+    t * t * t
+  }
+
+  def double(n: Int): Int = {
+    println(s"double $n")
+    n * 2
+  }
+
+
+
+  println(callByName(double(1)))
 }
