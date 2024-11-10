@@ -1,5 +1,7 @@
 package lectures.week3fp
 
+import scala.math.BigDecimal.int2bigDecimal
+
 object Module_4_7 extends App {
   def divide(a: Int, b: Int): Either[String, Int] = {
     if (b == 0)
@@ -57,4 +59,67 @@ object Module_4_7 extends App {
   }
 
   display(loadFromDb())
+
+
+  val title: String = "Company-A"
+  val employeeCount: Int = 100
+  val retiredCount: Int = 10
+
+  case class Company(title: String, employeeCount: Int) {
+
+  }
+
+  object Company {
+    implicit class Manager(company: Company) {
+      def -(peopleCount: Int): Company = company.copy(employeeCount = employeeCount - peopleCount)
+    }
+  }
+
+  val company = Company("ggg", 22)
+  val company2 = company.copy(title = "sdfsdf")
+
+  println(Company(title, employeeCount) - retiredCount)
+
+  trait SeniorityLevel
+
+  object SeniorityLevel {
+    case object Junior extends SeniorityLevel
+    case object Middle extends SeniorityLevel
+    case object Senior extends SeniorityLevel
+  }
+
+  case class Developer(
+                        name: String,
+                        level: SeniorityLevel,
+                        progLanguage: List[String]
+                      )
+
+  val developers: List[Developer] = {
+    List(
+      Developer("Sam", SeniorityLevel.Junior, List("Scala", "Java", "SQL")),
+      Developer("Pam", SeniorityLevel.Middle, List("Scala", "Java", "SQL")),
+      Developer("Rom", SeniorityLevel.Middle, List("Scala", "Java")),
+      Developer("Go", SeniorityLevel.Senior, List("Scala", "Java", "SQL", "C++")),
+      Developer("Howard", SeniorityLevel.Senior, List("SQL", "C++"))
+    )
+  }
+
+  val foundDevs: List[String] =
+    developers
+      .filter(n => n.level == SeniorityLevel.Middle || n.level == SeniorityLevel.Senior)
+      .filter(n => n.progLanguage.length >= 3)
+      .map(n => n.name)
+
+  println(foundDevs)
+
+  val capacity = 1000000000
+  val power = 4
+  //val powerOfTwo = LazyList.fill(capacity)(2.toBigInt).scanLeft(2.toBigInt)(_ * _).take(power).#::(1).toList.last
+  val powerOfTwo = LazyList
+    .fill(capacity)(2.toBigInt)
+    .take(power)
+    .foldLeft(1.toBigInt)((r, c) => r * c)
+
+  println(powerOfTwo)
+
 }
